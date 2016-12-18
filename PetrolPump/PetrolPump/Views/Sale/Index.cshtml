@@ -1,0 +1,163 @@
+﻿@using System.ServiceModel.Activities
+@using System.Web.UI.WebControls
+@using patrolPumpApp.Models
+@model patrolPumpApp.Models.Sale
+@{
+    Layout = null;
+    List<Item> itemList = ViewBag.Items;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+</head>
+<body ng-app="patrolPump">
+
+
+    <div class="container">
+
+        <form class="well form-horizontal" action="SalePost" method="post" id="contact_form">
+            <fieldset>
+
+                <!-- Form Name -->
+                <legend>Padma Oil Company</legend>
+
+                <!-- Text input-->
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Registration No</label>
+                    <div class="col-md-4 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input name="CarNo" placeholder="Car No" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- radio checks -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Select Item</label>
+                    <div class="col-md-4">
+
+
+
+                        @foreach (var item in itemList)
+                        {
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" class="radio item" name="ItemId" value="@item.ItemId" data-price="@item.Price" /> @item.Name
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label"></label>
+                    <div class="col-md-4 inputGroupContainer">
+                        <div class="input-group">
+
+                            <div ng-controller="calculate">
+                                <div class="col-md-5">
+                                    <input name="Amount" id="Taka" placeholder="Taka" class="form-control" type="text">Taka
+                                </div>
+                                <div class="col-md-5">
+                                    <input name="Unit" id="Unit" placeholder="Liter" class="form-control" type="text">Unit
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <!-- Button -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label"></label>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-warning">Submit<span class="glyphicon glyphicon-send"></span></button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+
+<script>
+    
+    function calculate() {  
+        var unitPrice = $('input[name=ItemId]:checked').data('price');
+        var taka = $('#Taka').val();
+        var total = taka / unitPrice;
+        $("#Unit").val(total); 
+    }
+
+    function CalculateTaka() {
+        var unitPrice = $('input[name=ItemId]:checked').data('price');
+        var taka = $('#Unit').val();
+        var total = taka * unitPrice;
+        $("#Taka").val(total);
+    }
+
+
+    $(document)
+
+
+
+
+      .ready(function () {
+          var unitPrice = $('input[name=ItemId]:checked').data('price');
+
+         
+            $("#Taka")
+                .keyup(function() {
+                    calculate();
+
+                });
+
+
+            $("#Unit").keyup(function () {
+
+                CalculateTaka();
+            });
+            
+            
+          
+
+        });
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
